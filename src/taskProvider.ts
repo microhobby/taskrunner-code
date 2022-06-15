@@ -1,54 +1,69 @@
 import * as vscode from 'vscode';
 
 export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
+    private readonly _onDidChangeTreeData: vscode.EventEmitter<TreeTask | null>
+    = new vscode.EventEmitter<TreeTask | null>();
 
-	private _onDidChangeTreeData: vscode.EventEmitter<TreeTask | null> = new vscode.EventEmitter<TreeTask | null>();
-	readonly onDidChangeTreeData: vscode.Event<TreeTask | null> = this._onDidChangeTreeData.event;
+    readonly onDidChangeTreeData: vscode.Event<TreeTask | null>
+    = this._onDidChangeTreeData.event;
 
-	private autoRefresh: boolean = true;
+    private readonly autoRefresh: boolean = true;
 
-	constructor(private context: vscode.ExtensionContext) {
-		this.autoRefresh = vscode.workspace.getConfiguration('taskOutline').get('autorefresh');
-	}
+    constructor (private readonly context: vscode.ExtensionContext) {
+        const autoRefreshConfig: boolean | undefined = vscode.workspace
+            .getConfiguration('taskOutlinePlus').get('autorefresh');
 
-	refresh(): void {
-		this._onDidChangeTreeData.fire();
-	}
+        if (autoRefreshConfig === undefined) {
+            // default is true
+            this.autoRefresh = true;
+        } else {
+            this.autoRefresh = autoRefreshConfig;
+        }
+    }
 
-	public async getChildren(task?: TreeTask): Promise<TreeTask[]> {
-	
-		let tasks = await vscode.tasks.fetchTasks().then(function (value) {
-			return value;
-		});
+    refresh (): void {
+        this._onDidChangeTreeData.fire(null);
+    }
 
-		let taskNames: TreeTask[] = [];
-		if (tasks.length != 0) {
-			for (var i = 0; i < tasks.length; i++ ) {
-				taskNames[i] = new TreeTask(tasks[i].definition.type, tasks[i].name, vscode.TreeItemCollapsibleState.None, { command: 'taskOutline.executeTask', title: "Execute", arguments: [tasks[i]] });
-			}
-		}
-		return taskNames;
-	
-	}
+    public async getChildren (task?: TreeTask): Promise<TreeTask[]> {
+        const tasks = await vscode.tasks.fetchTasks();
 
-	getTreeItem(task: TreeTask): vscode.TreeItem {
-		return task;
-	}
+        const taskNames: TreeTask[] = [];
+        if (tasks.length !== 0) {
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].detail !== "hide") {
+                    taskNames[i] = new TreeTask(
+                        tasks[i].definition.type,
+                        tasks[i].name,
+                        vscode.TreeItemCollapsibleState.None,
+                        {
+                            command: 'taskOutlinePlus.executeTask',
+                            title: "Execute",
+                            arguments: [tasks[i]]
+                        }
+                    );
+                }
+            }
+        }
+        return taskNames;
+    }
+
+    getTreeItem (task: TreeTask): vscode.TreeItem {
+        return task;
+    }
 }
 
 class TreeTask extends vscode.TreeItem {
-	type: string;
+    type: string;
 
-	constructor(
-		type: string, 
-		label: string, 
-		collapsibleState: vscode.TreeItemCollapsibleState,
-		command?: vscode.Command
-	) {
-		super(label, collapsibleState);
-		this.type = type;
-		this.command = command;
-	}
-	 
+    constructor (
+        type: string,
+        label: string,
+        collapsibleState: vscode.TreeItemCollapsibleState,
+        command?: vscode.Command
+    ) {
+        super(label, collapsibleState);
+        this.type = type;
+        this.command = command;
+    }
 }
-

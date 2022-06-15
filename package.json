@@ -1,16 +1,16 @@
 {
-    "name": "taskrunnercode",
-    "displayName": "Task Runner",
+    "name": "taskrunnercodeplus",
+    "displayName": "Task Runner Plus",
     "description": "VS Code extension to view and run tasks from Explorer pane",
     "icon": "check.png",
-    "version": "0.2.0",
-    "publisher": "SanaAjani",
+    "version": "0.0.1",
+    "publisher": "microhobby",
     "repository": {
         "type": "git",
-        "url": "https://github.com/sana-ajani/taskrunner-code.git"
+        "url": "https://github.com/microhobby/taskrunner-code.git"
     },
     "engines": {
-        "vscode": "^1.26.0"
+        "vscode": "^1.46.0"
     },
     "categories": [
         "Other"
@@ -31,18 +31,18 @@
         "views": {
             "explorer": [
                 {
-                    "id": "taskOutline",
+                    "id": "taskOutlinePlus",
                     "name": "Task Runner"
                 }
             ]
         },
         "commands": [
             {
-                "command": "taskOutline.executeTask",
+                "command": "taskOutlinePlus.executeTask",
                 "title": "Execute"
             },
             {
-                "command": "taskOutline.refresh",
+                "command": "taskOutlinePlus.refresh",
                 "title": "Refresh",
                 "icon": "assets/refresh_icon.svg"
             }
@@ -50,24 +50,31 @@
         "menus": {
             "view/title": [
                 {
-                    "command": "taskOutline.refresh",
+                    "command": "taskOutlinePlus.refresh",
                     "group": "navigation"
                 }
             ]
-        }
+        },
+        "taskDefinitions": [
+            {
+                "type": "util"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
-        "@types/node": "^8.10.25",
-        "typescript": "^3.0.3",
-        "vscode": "^1.1.21",
-        "tslint": "^5.8.0"
+        "@types/node": "^12.11.7",
+        "@types/vscode": "^1.46.0",
+        "eslint": "^7.15.0",
+        "@typescript-eslint/eslint-plugin": "^4.9.0",
+        "@typescript-eslint/parser": "^4.9.0",
+        "eslint-config-standard-jsx": "^10.0.0",
+        "eslint-config-standard-with-typescript": "^19.0.1",
+        "typescript": "^4.1.2"
     }
 }
