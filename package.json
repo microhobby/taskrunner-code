@@ -3,7 +3,7 @@
     "displayName": "Task Runner Plus",
     "description": "VS Code extension to view and run tasks from Explorer pane",
     "icon": "check.png",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "microhobby",
     "repository": {
         "type": "git",
@@ -44,13 +44,14 @@
             {
                 "command": "taskOutlinePlus.refresh",
                 "title": "Refresh",
-                "icon": "assets/refresh_icon.svg"
+                "icon": "$(extensions-refresh)"
             }
         ],
         "menus": {
             "view/title": [
                 {
                     "command": "taskOutlinePlus.refresh",
+                    "when": "view == taskOutlinePlus",
                     "group": "navigation"
                 }
             ]
