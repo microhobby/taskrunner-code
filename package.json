@@ -65,7 +65,8 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./"
+        "watch": "tsc -watch -p ./",
+        "pack": "vsce package --allow-star-activation"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
