@@ -26,7 +26,8 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     }
 
     public async getChildren (task?: TreeTask): Promise<TreeTask[]> {
-        const tasks = await vscode.tasks.fetchTasks();
+        let tasks: vscode.Task[] = await vscode.tasks.fetchTasks();
+        tasks = tasks.filter(t => t.source === "Workspace");
 
         const taskNames: TreeTask[] = [];
         if (tasks.length !== 0) {
