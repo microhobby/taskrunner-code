@@ -47,7 +47,9 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
             }
 
             // order by name
-            taskNames = taskNames.sort((one, two) => (one > two ? -1 : 1));
+            taskNames = taskNames.sort((one, two) =>
+                (one.label! < two.label! ? -1 : 1)
+            );
         }
 
         return taskNames;
