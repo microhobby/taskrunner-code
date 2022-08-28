@@ -29,7 +29,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
         let tasks: vscode.Task[] = await vscode.tasks.fetchTasks();
         tasks = tasks.filter(t => t.source === "Workspace");
 
-        const taskNames: TreeTask[] = [];
+        let taskNames: TreeTask[] = [];
         if (tasks.length !== 0) {
             for (var i = 0; i < tasks.length; i++) {
                 if (tasks[i].detail !== "hide") {
@@ -45,7 +45,11 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                     );
                 }
             }
+
+            // order by name
+            taskNames = taskNames.sort((one, two) => (one > two ? -1 : 1));
         }
+
         return taskNames;
     }
 
