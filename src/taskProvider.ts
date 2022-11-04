@@ -41,7 +41,8 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                             command: 'taskOutlinePlus.executeTask',
                             title: "Execute",
                             arguments: [tasks[i]]
-                        }
+                        },
+                        tasks[i].scope
                     );
                 }
             }
@@ -67,10 +68,26 @@ class TreeTask extends vscode.TreeItem {
         type: string,
         label: string,
         collapsibleState: vscode.TreeItemCollapsibleState,
-        command?: vscode.Command
+        command?: vscode.Command,
+        workspace?: vscode.WorkspaceFolder | vscode.TaskScope
     ) {
         super(label, collapsibleState);
         this.type = type;
         this.command = command;
+        this.label = `${this.label as string}`;
+
+        // in multi-root workspaces we need to label the tasks by folder
+        if (
+            vscode.workspace.workspaceFolders != null &&
+            vscode.workspace.workspaceFolders.length > 1
+        ) {
+            if (
+                workspace != null &&
+                (workspace as vscode.WorkspaceFolder).name != null
+            ) {
+                this.label +=
+                    ` (${(workspace as vscode.WorkspaceFolder).name})`;
+            }
+        }
     }
 }
