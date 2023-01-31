@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { TaskTreeDataProvider } from './taskProvider'
 
-export function activate (context: vscode.ExtensionContext): void {
+export function activate (context: vscode.ExtensionContext): object {
     const taskTreeDataProvider = new TaskTreeDataProvider(context);
 
     vscode.window.registerTreeDataProvider(
@@ -26,6 +26,8 @@ export function activate (context: vscode.ExtensionContext): void {
                     scope != null &&
                     (scope as vscode.WorkspaceFolder).name != null
                 ) {
+                    // eslint-disable-next-line max-len
+                    console.log(`storing source: ${(scope as vscode.WorkspaceFolder).name}`);
                     await context.globalState.update(
                         "______taskRunnerPlusWorkspaceSource______",
                         (scope as vscode.WorkspaceFolder).name
@@ -33,18 +35,28 @@ export function activate (context: vscode.ExtensionContext): void {
                 }
             }
 
-            await vscode.tasks.executeTask(task).then(function (value) {
-                return value;
-            }, function (e) {
-                console.error('I am error');
-            });
-
-            // clean up
-            await context.globalState.update(
-                "______taskRunnerPlusWorkspaceSource______",
-                null
-            );
+            void vscode.tasks.executeTask(task)
+                .then(execution => {
+                    vscode.tasks.onDidEndTask(e => {
+                        if (e.execution === execution) {
+                            // clean up
+                            // eslint-disable-next-line max-len
+                            console.log(`cleaning store source ${(scope as vscode.WorkspaceFolder).name}`);
+                            void context.globalState.update(
+                                "______taskRunnerPlusWorkspaceSource______",
+                                null
+                            );
+                        }
+                    });
+                });
         });
+
+    return {
+        taskSource () {
+            return context.globalState
+                .get("______taskRunnerPlusWorkspaceSource______");
+        }
+    };
 }
 
 export function deactivate (): void {

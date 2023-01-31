@@ -3,14 +3,14 @@
     "displayName": "Task Runner Plus",
     "description": "VS Code extension to view and run tasks from Explorer pane",
     "icon": "check.png",
-    "version": "0.0.7",
+    "version": "0.0.10",
     "publisher": "microhobby",
     "repository": {
         "type": "git",
         "url": "https://github.com/microhobby/taskrunner-code.git"
     },
     "engines": {
-        "vscode": "^1.46.0"
+        "vscode": "^1.74.0"
     },
     "categories": [
         "Other"
@@ -71,7 +71,7 @@
     "devDependencies": {
         "@types/mocha": "^2.2.42",
         "@types/node": "^12.11.7",
-        "@types/vscode": "^1.46.0",
+        "@types/vscode": "^1.74.0",
         "eslint": "^7.15.0",
         "@typescript-eslint/eslint-plugin": "^4.9.0",
         "@typescript-eslint/parser": "^4.9.0",
