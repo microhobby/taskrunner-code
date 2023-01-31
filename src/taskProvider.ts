@@ -40,7 +40,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                         {
                             command: 'taskOutlinePlus.executeTask',
                             title: "Execute",
-                            arguments: [tasks[i]]
+                            arguments: [tasks[i], tasks[i].scope]
                         },
                         tasks[i].scope
                     );
