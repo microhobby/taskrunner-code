@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 
 export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     private readonly _onDidChangeTreeData: vscode.EventEmitter<TreeTask | null>
@@ -29,21 +30,25 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
         let tasks: vscode.Task[] = await vscode.tasks.fetchTasks();
         tasks = tasks.filter(t => t.source === "Workspace");
 
+        // also read the tasks.json file from the workspace
+
         let taskNames: TreeTask[] = [];
         if (tasks.length !== 0) {
             for (var i = 0; i < tasks.length; i++) {
-                if (tasks[i].detail !== "hide") {
-                    taskNames[i] = new TreeTask(
-                        tasks[i].definition.type,
-                        tasks[i].name,
-                        vscode.TreeItemCollapsibleState.None,
-                        {
-                            command: 'taskOutlinePlus.executeTask',
-                            title: "Execute",
-                            arguments: [tasks[i], tasks[i].scope]
-                        },
-                        tasks[i].scope
-                    );
+                const _task = new TreeTask(
+                    tasks[i].definition.type,
+                    tasks[i].name,
+                    vscode.TreeItemCollapsibleState.None,
+                    {
+                        command: 'taskOutlinePlus.executeTask',
+                        title: "Execute",
+                        arguments: [tasks[i], tasks[i].scope]
+                    },
+                    tasks[i].scope
+                );
+
+                if (!_task.hide) {
+                    taskNames.push(_task);
                 }
             }
 
@@ -63,6 +68,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
 
 class TreeTask extends vscode.TreeItem {
     type: string;
+    hide: boolean = false;
 
     constructor (
         type: string,
@@ -75,6 +81,23 @@ class TreeTask extends vscode.TreeItem {
         this.type = type;
         this.command = command;
         this.label = `${this.label as string}`;
+
+        // take sure that the task is not hidden
+        // read the workspace tasks.json file
+        for (const _workspace of vscode.workspace.workspaceFolders!) {
+            const _tasksJson = JSON.parse(
+                fs.readFileSync(
+                    `${_workspace.uri.fsPath}/.vscode/tasks.json`, 'utf8'
+                )
+            );
+
+            for (const _task of _tasksJson.tasks) {
+                if (_task.label === this.label) {
+                    this.hide = _task.hide ?? false;
+                    break;
+                }
+            }
+        }
 
         // in multi-root workspaces we need to label the tasks by folder
         if (
