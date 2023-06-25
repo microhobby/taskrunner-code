@@ -47,6 +47,10 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                     tasks[i].scope
                 );
 
+                if (tasks[i].detail != null) {
+                    _task.tooltip = tasks[i].detail;
+                }
+
                 if (!_task.hide) {
                     taskNames.push(_task);
                 }
