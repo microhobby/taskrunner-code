@@ -98,6 +98,15 @@ class TreeTask extends vscode.TreeItem {
             for (const _task of _tasksJson.tasks) {
                 if (_task.label === this.label) {
                     this.hide = _task.hide ?? false;
+
+                    // icon
+                    if (_task.icon != null && _task.icon.id !== "") {
+                        this.iconPath = new vscode.ThemeIcon(
+                            _task.icon.id,
+                            _task.icon.color
+                        );
+                    }
+
                     break;
                 }
             }
