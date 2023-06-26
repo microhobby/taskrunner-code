@@ -3,7 +3,7 @@
     "displayName": "Task Runner Plus",
     "description": "VS Code extension to view and run tasks from Explorer pane",
     "icon": "check.png",
-    "version": "0.0.11",
+    "version": "0.0.14",
     "publisher": "microhobby",
     "repository": {
         "type": "git",
@@ -66,7 +66,8 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "pack": "vsce package --allow-star-activation"
+        "pack": "vsce package --allow-star-activation",
+        "pre-pack": "vsce package --allow-star-activation --pre-release"
     },
     "devDependencies": {
         "@types/mocha": "^2.2.42",
@@ -78,5 +79,8 @@
         "eslint-config-standard-jsx": "^10.0.0",
         "eslint-config-standard-with-typescript": "^19.0.1",
         "typescript": "^4.1.2"
+    },
+    "dependencies": {
+        "json5": "^2.2.3"
     }
 }

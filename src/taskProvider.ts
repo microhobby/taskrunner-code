@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import * as JSON5 from 'json5';
 
 export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     private readonly _onDidChangeTreeData: vscode.EventEmitter<TreeTask | null>
@@ -89,7 +90,7 @@ class TreeTask extends vscode.TreeItem {
         // take sure that the task is not hidden
         // read the workspace tasks.json file
         for (const _workspace of vscode.workspace.workspaceFolders!) {
-            const _tasksJson = JSON.parse(
+            const _tasksJson = JSON5.parse(
                 fs.readFileSync(
                     `${_workspace.uri.fsPath}/.vscode/tasks.json`, 'utf8'
                 )

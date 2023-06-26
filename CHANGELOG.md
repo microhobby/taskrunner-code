@@ -1,7 +1,12 @@
 # Change Log
-All notable changes to the "taskrunnercode" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
 ## [Unreleased]
-- Initial release
+
+- Add JSON5 module;
+- Use JSON5 to load json with comments;
+- Use the icon to show the task icons on the tree task list;
+- Use the default `hide` property instead `details` with hide content to avoid the task to be listed on the tree task list;
+
+## [0.0.10]
+
+- Not documented;
