@@ -10,6 +10,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     = this._onDidChangeTreeData.event;
 
     private readonly autoRefresh: boolean = true;
+    private _unhide: boolean = false;
 
     constructor (private readonly context: vscode.ExtensionContext) {
         const autoRefreshConfig: boolean | undefined = vscode.workspace
@@ -24,6 +25,11 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     }
 
     refresh (): void {
+        this._onDidChangeTreeData.fire(null);
+    }
+
+    unhide (): void {
+        this._unhide = !this._unhide;
         this._onDidChangeTreeData.fire(null);
     }
 
@@ -52,7 +58,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                     _task.tooltip = tasks[i].detail;
                 }
 
-                if (!_task.hide) {
+                if (!_task.hide || this._unhide) {
                     taskNames.push(_task);
                 }
             }

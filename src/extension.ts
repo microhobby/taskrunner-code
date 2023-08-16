@@ -9,6 +9,9 @@ export function activate (context: vscode.ExtensionContext): object {
     vscode.commands.registerCommand(
         'taskOutlinePlus.refresh', () => taskTreeDataProvider.refresh()
     );
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.unhide', () => taskTreeDataProvider.unhide()
+    );
 
     vscode.commands.registerCommand(
         'taskOutlinePlus.executeTask', async function (
