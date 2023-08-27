@@ -3,7 +3,7 @@
     "displayName": "Task Runner Plus",
     "description": "VS Code extension to view and run tasks from Explorer pane",
     "icon": "check.png",
-    "version": "0.0.16",
+    "version": "0.0.17",
     "publisher": "microhobby",
     "repository": {
         "type": "git",
@@ -21,7 +21,7 @@
         "execute"
     ],
     "galleryBanner": {
-        "color": "#d7ede1"
+        "color": "#c68f00"
     },
     "activationEvents": [
         "*"
