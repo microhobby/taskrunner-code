@@ -4,6 +4,9 @@ import { TaskTreeDataProvider } from './taskProvider'
 export function activate (context: vscode.ExtensionContext): object {
     const taskTreeDataProvider = new TaskTreeDataProvider(context);
 
+    // we need all as soon we activate it
+    void vscode.tasks.fetchTasks();
+
     vscode.window.registerTreeDataProvider(
         'taskOutlinePlus', taskTreeDataProvider);
     vscode.commands.registerCommand(
@@ -53,6 +56,30 @@ export function activate (context: vscode.ExtensionContext): object {
                     });
                 });
         });
+
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.execCmdline', async function () {
+            await taskTreeDataProvider.putTaskCmd();
+        }
+    );
+
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.exitCmdline', async function () {
+            await taskTreeDataProvider.exitTaskCmd();
+        }
+    );
+
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.backCmdline', async function () {
+            await taskTreeDataProvider.backTaskCmd();
+        }
+    );
+
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.tabCmdline', async function () {
+            await taskTreeDataProvider.tabTaskCmd();
+        }
+    );
 
     return {
         taskSource () {

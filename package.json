@@ -50,6 +50,40 @@
                 "command": "taskOutlinePlus.unhide",
                 "title": "Hide/Unhide",
                 "icon": "$(eye-closed)"
+            },
+            {
+                "command": "taskOutlinePlus.execCmdline",
+                "title": "Execute Command Line"
+            },
+            {
+                "command": "taskOutlinePlus.exitCmdline",
+                "title": "Exit Command Line"
+            },
+            {
+                "command": "taskOutlinePlus.tabCmdline",
+                "title": "Tab Command Line"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "taskOutlinePlus.execCmdline",
+                "key": "Ctrl+Shift+.",
+                "when": "!inCmdlineMode"
+            },
+            {
+                "command": "taskOutlinePlus.exitCmdline",
+                "key": "escape",
+                "when": "inCmdlineMode"
+            },
+            {
+                "command": "taskOutlinePlus.backCmdline",
+                "key": "backspace",
+                "when": "inCmdlineMode"
+            },
+            {
+                "command": "taskOutlinePlus.tabCmdline",
+                "key": "tab",
+                "when": "inCmdlineMode"
             }
         ],
         "menus": {
