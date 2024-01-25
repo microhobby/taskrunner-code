@@ -1,6 +1,11 @@
 # Change Log
 
-## [Unreleased]
+## [1.0.1]
+
+- Add the workspace name in the list from vim like command;
+- Fix backspace does not working on the input from vim like command;
+
+## [1.0.0]
 
 - Add JSON5 module;
 - Use JSON5 to load json with comments;
