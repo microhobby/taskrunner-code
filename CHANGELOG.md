@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.2]
+
+- Fix vim like cmdline on status bar still locked after the task is running;
+
 ## [1.0.1]
 
 - Add the workspace name in the list from vim like command;
