@@ -118,7 +118,21 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                     _matchCount++;
                 }
 
-                _matches.push(_task.name);
+                // in multi-root workspaces we need to label the tasks by folder
+                if (
+                    vscode.workspace.workspaceFolders != null &&
+                    vscode.workspace.workspaceFolders.length > 1
+                ) {
+                    let _workSpaceName = "";
+                    if (typeof _task.scope !== "string") {
+                        _workSpaceName =
+                            (_task.scope as vscode.WorkspaceFolder).name;
+                    }
+
+                    _matches.push(`${_task.name} (${_workSpaceName})`);
+                } else {
+                    _matches.push(`${_task.name}`);
+                }
             }
         }
 
