@@ -189,14 +189,6 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
                     this._statusBarI.text = "-- UNDEFINED TASK --";
                 }
             }
-
-            // back to the cmdline
-            await vscode
-                .commands.executeCommand(
-                    "setContext",
-                    "inCmdlineMode",
-                    true
-                );
         }
     }
 
