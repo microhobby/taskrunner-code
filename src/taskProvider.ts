@@ -151,11 +151,17 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
             // show option list
             let _pick = await vscode.window.showQuickPick(_matches);
             if (_pick != null) {
-                // we get the match for the task name and the (workspace name)
-                const _rawTask = _pick.split(" ")[0];
-                const _name =
-                    _pick.split(" ")[1].replace("(", "").replace(")", "");
-                _pick = _rawTask;
+                let _name = "";
+                if (_pick.includes("(") && _pick.includes(")")) {
+                    // eslint-disable-next-line max-len
+                    // we get the match for the task name and the (workspace name)
+                    const _rawTask = _pick.split(" ")[0];
+                    _name =
+                        _pick.split(" ")[1].replace("(", "").replace(")", "");
+                    _pick = _rawTask;
+                } else {
+                    _name = _pick;
+                }
 
                 this._statusBarBuffer = ["/", ..._pick.split("")];
                 this._statusBarI.text = this._statusBarBuffer.join("");
