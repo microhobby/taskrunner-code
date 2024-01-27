@@ -15,6 +15,10 @@ export function activate (context: vscode.ExtensionContext): object {
     vscode.commands.registerCommand(
         'taskOutlinePlus.unhide', () => taskTreeDataProvider.unhide()
     );
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.showList',
+        async () => await taskTreeDataProvider.tabTaskCmd()
+    );
 
     vscode.commands.registerCommand(
         'taskOutlinePlus.executeTask', async function (

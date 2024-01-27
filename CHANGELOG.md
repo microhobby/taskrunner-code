@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.1.0]
+
+- Add `Filter` icon to show a input list to filter the tasks by input name;
+
 ## [1.0.2]
 
 - Fix vim like cmdline on status bar still locked after the task is running;
