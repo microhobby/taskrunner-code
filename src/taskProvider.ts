@@ -242,7 +242,7 @@ export class TaskTreeDataProvider implements vscode.TreeDataProvider<TreeTask> {
     }
 }
 
-class TreeTask extends vscode.TreeItem {
+export class TreeTask extends vscode.TreeItem {
     type: string;
     hide: boolean = false;
 

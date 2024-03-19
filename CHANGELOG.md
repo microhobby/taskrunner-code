@@ -1,5 +1,10 @@
 # Change Log
 
+## [1.2.0]
+
+- Execute the task by the menu context of the task;
+- Go to the task definition on tasks.json by the menu context of the task;
+
 ## [1.1.0]
 
 - Add `Filter` icon to show a input list to filter the tasks by input name;

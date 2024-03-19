@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
-import { TaskTreeDataProvider } from './taskProvider'
+import {
+    TaskTreeDataProvider,
+    TreeTask
+} from './taskProvider'
 
 export function activate (context: vscode.ExtensionContext): object {
     const taskTreeDataProvider = new TaskTreeDataProvider(context);
@@ -18,6 +21,59 @@ export function activate (context: vscode.ExtensionContext): object {
     vscode.commands.registerCommand(
         'taskOutlinePlus.showList',
         async () => await taskTreeDataProvider.tabTaskCmd()
+    );
+
+    vscode.commands.registerCommand(
+        'taskOutlinePlus.goToTask',
+        async (
+            task: TreeTask
+        ) => {
+            // TODO: this for now does not work in multi-root workspaces
+            if (
+                vscode.workspace.workspaceFolders != null &&
+                vscode.workspace.workspaceFolders.length > 1
+            ) {
+                // eslint-disable-next-line max-len
+                void vscode.window.showErrorMessage("Sorry, this feature is not available in multi-root workspaces");
+                return;
+            } else if (vscode.workspace.workspaceFolders != null) {
+                const _tasksFile =
+                    vscode.Uri.parse(
+                        // eslint-disable-next-line max-len
+                        `${vscode.workspace.workspaceFolders[0].uri.fsPath}/.vscode/tasks.json`
+                    );
+                const _tasksFileContent = await vscode.workspace.fs.readFile(
+                    _tasksFile
+                );
+
+                const _lines = Buffer.from(_tasksFileContent)
+                    .toString('utf-8').split('\n');
+                let _ln = 0;
+
+                for (const _line of _lines) {
+                    if (_line.includes(task.label as string)) {
+                        // open on editor in the line
+                        void vscode.window.showTextDocument(
+                            _tasksFile,
+                            {
+                                selection: new vscode.Range(
+                                    _ln, 0, _ln, 0
+                                )
+                            }
+                        );
+
+                        return;
+                    }
+
+                    _ln++;
+                }
+
+                return;
+            }
+
+            // eslint-disable-next-line max-len
+            void vscode.window.showErrorMessage("THIS IS IMPOSSIBLE!!");
+        }
     );
 
     vscode.commands.registerCommand(
