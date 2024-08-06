@@ -258,14 +258,46 @@ export class TreeTask extends vscode.TreeItem {
         this.command = command;
         this.label = `${this.label as string}`;
 
-        // take sure that the task is not hidden
-        // read the workspace tasks.json file
+        const multiRoot = vscode.workspace.workspaceFolders!.length > 1;
+
         for (const _workspace of vscode.workspace.workspaceFolders!) {
-            const _tasksJson = JSON5.parse(
-                fs.readFileSync(
-                    `${_workspace.uri.fsPath}/.vscode/tasks.json`, 'utf8'
-                )
-            );
+            let _tasksJson;
+            // Make sure that the task is not hidden by reading the workspace
+            // tasks.json file. Also, on a multiroot workspace the tasks may
+            // be defined just on the code-workspace file and there may not
+            // be a .vscode/tasks.json file
+            if (
+                multiRoot &&
+                // eslint-disable-next-line max-len
+                fs.existsSync(`${_workspace.uri.fsPath}/${_workspace.name}.code-workspace`)
+            ) {
+                _tasksJson = JSON5.parse(
+                    fs.readFileSync(
+                        // eslint-disable-next-line max-len
+                        `${_workspace.uri.fsPath}/${_workspace.name}.code-workspace`, 'utf8'
+                    )
+                ).tasks;
+                // If it exists, concatenate the tasks from both places
+                if (fs.existsSync(
+                    `${_workspace.uri.fsPath}/.vscode/tasks.json`)) {
+                    const _tasksJsonFile = JSON5.parse(
+                        fs.readFileSync(
+                            // eslint-disable-next-line max-len
+                            `${_workspace.uri.fsPath}/.vscode/tasks.json`, 'utf8'
+                        )
+                    );
+                    _tasksJson.tasks = [
+                        ..._tasksJson.tasks,
+                        ..._tasksJsonFile.tasks
+                    ]
+                }
+            } else {
+                _tasksJson = JSON5.parse(
+                    fs.readFileSync(
+                        `${_workspace.uri.fsPath}/.vscode/tasks.json`, 'utf8'
+                    )
+                );
+            }
 
             for (const _task of _tasksJson.tasks) {
                 if (_task.label === this.label) {
@@ -279,22 +311,12 @@ export class TreeTask extends vscode.TreeItem {
                         );
                     }
 
+                    if (multiRoot) {
+                        this.label += ` (${_workspace.name})`;
+                    }
+
                     break;
                 }
-            }
-        }
-
-        // in multi-root workspaces we need to label the tasks by folder
-        if (
-            vscode.workspace.workspaceFolders != null &&
-            vscode.workspace.workspaceFolders.length > 1
-        ) {
-            if (
-                workspace != null &&
-                (workspace as vscode.WorkspaceFolder).name != null
-            ) {
-                this.label +=
-                    ` (${(workspace as vscode.WorkspaceFolder).name})`;
             }
         }
     }
