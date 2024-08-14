@@ -14,9 +14,13 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
+            },
+            "dependsOn": [
+                "extension-compile"
+            ]
         },
         {
+            "label": "extension-compile",
             "type": "npm",
             "script": "compile",
             "problemMatcher": [
