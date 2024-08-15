@@ -1,5 +1,9 @@
 # Change Log
 
+## [Next]
+
+- Added support for .code-workspace files;
+
 ## [1.2.0]
 
 - Execute the task by the menu context of the task;
