@@ -164,9 +164,14 @@ vscode.TreeDataProvider<TreeTask | GroupTreeItem | WorkspaceTreeItem> {
                     vscode.workspace.workspaceFolders.length > 1
                 ) {
                     let _workSpaceName = "";
-                    if (typeof _task.scope !== "string") {
-                        _workSpaceName =
-                            (_task.scope as vscode.WorkspaceFolder).name;
+                    if (typeof _task.scope === "number") {
+                        _workSpaceName = vscode.workspace.workspaceFolders[
+                            _task.scope
+                        ].name;
+                    } else if (typeof _task.scope !== "string") {
+                        _workSpaceName = (
+                            _task.scope as vscode.WorkspaceFolder
+                        ).name;
                     }
 
                     _matches.push(`${_task.name} (${_workSpaceName})`);
