@@ -216,19 +216,27 @@ vscode.TreeDataProvider<TreeTask | GroupTreeItem | WorkspaceTreeItem> {
                 this._statusBarBuffer.shift();
 
                 let _task: vscode.Task[] = [];
-                if (
-                    vscode.workspace.workspaceFolders != null &&
-                    vscode.workspace.workspaceFolders.length > 1
-                ) {
-                    _task = tasks.filter(
-                        t =>
-                            t.name === this._statusBarBuffer.join("") &&
-                            (t.scope as vscode.WorkspaceFolder).name === _name
-                    );
+                const folders = vscode.workspace.workspaceFolders;
+
+                if (folders != null && folders.length > 1) {
+                    _task = tasks.filter(t => {
+                        if (t.name !== this._statusBarBuffer.join("")) {
+                            return false;
+                        }
+
+                        if (typeof t.scope === "number") {
+                            return folders[t.scope]?.name === _name;
+                        } else if (typeof t.scope !== "string") {
+                            return (
+                                t.scope as vscode.WorkspaceFolder
+                            ).name === _name;
+                        }
+
+                        return false;
+                    });
                 } else {
                     _task = tasks.filter(
-                        t =>
-                            t.name === this._statusBarBuffer.join("")
+                        t => t.name === this._statusBarBuffer.join("")
                     );
                 }
 
